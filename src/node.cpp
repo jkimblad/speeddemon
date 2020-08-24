@@ -1,19 +1,15 @@
 #include <stdio.h>
+
 #include <vector>
 
 namespace speeddemon {
-	namespace dag {
+namespace dag {
 
-		class Node {
+class Node {
+       public:
+	std::vector<Node> children;
 
-
-			public:	
-				std::vector<Node> children;
-
-
-				void add_child() {
-
-				}
-		};
-	}
-}
+	void add_child() {}
+};
+}  // namespace dag
+}  // namespace speeddemon

@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <chrono>
+#include <cstddef>
 #include <sstream>
 #include <stdexcept>
 
@@ -7,8 +9,14 @@
 namespace speeddemon {
 namespace dag {
 class Dag {
+	typedef std::chrono::steady_clock::time_point timestamp;
+
 	static unsigned int id_counter;
+	static Node* lastVisited;
+
 	std::vector<Node> nodes;
+
+	Node get_root() { return nodes.front(); };
 
        public:
 	Dag() {
@@ -17,30 +25,48 @@ class Dag {
 		if (!id_counter) {
 			id_counter = 0;
 		}
+
+		lastVisited = nullptr;
 	}
 
-	Node get_root() { return nodes.front(); };
+	// Called when a timestamp is triggered
+	void stamp_trigger(const unsigned int id, timestamp timeStamp) {
+		// Check if id exists or if we should create a new node
+		if (std::find(nodes.begin(), nodes.end(), id) != nodes.end()) {
+			// TODO: Check if node is start node, as no timing
+			// information should be saved
+			//
+			// Update the last visited node with fresh information
+			lastVisited->add_timestamp(timeStamp, id);
+		} else {
+			new_node(id, timeStamp);
+		}
 
-	void add_node() {}
+		// Set this visited node to lastVistited for the next function
+		// call
+		lastVisited = get_node(id);
+	}
 
-	Node& get_node(const unsigned int id) {
+	// Add a new node
+	void new_node(const unsigned int id, timestamp timeStamp) {
+		Node* node = new Node(id);
+
+		// Add parent nodes
+		lastVisited->add_child(node, timeStamp);
+	}
+
+	// Get an existing node
+	Node* get_node(const unsigned int id) {
 		std::vector<Node>::iterator temp =
 		    std::find(nodes.begin(), nodes.end(), id);
 
 		// A match was found
 		if (temp != nodes.end()) {
-			return *temp;
+			return temp;
 		} else {
-			// std::string errorMessage =
-			// std::string("get_node() was called with id (") +
-			// id +
-			// std::string(") which is not assigned to any node!");
-			// TODO: throw proper error
-			throw std::runtime_error("temp"
-						 //(std::ostringstream()
-						 //<< "Could not!"
-						 //).str()
-			);
+			// TODO: throw proper error including id
+			throw std::runtime_error(
+			    "Error! Could not get node by given id!");
 		}
 	}
 };

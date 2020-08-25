@@ -16,6 +16,7 @@ namespace speeddemon {
 class SpeedDemon {
 	static std::vector<unsigned int> existingStamps;
 	static dag::Dag graph;
+	static std::chrono::steady_clock::time_point exit_time;
 
 	static void signal_handler(int signum) {
 		// Make sure we print all the results before returning
@@ -37,6 +38,9 @@ class SpeedDemon {
 
 		// Make sure that we capture kill signals so we can clean up and
 		// print any results before we exit
+		// TODO: This is good for now, but in the future we will
+		// probably want to have continous updates printed out on the
+		// CLI. Maybe using something like "ncurses"?
 		signal(SIGINT, signal_handler);
 		return;
 
@@ -48,16 +52,12 @@ class SpeedDemon {
 		// Use steady_clock, as the usage of high_resolution_clock
 		// should be avoided due to inconsistent implementations across
 		// different standard libraries.
-		auto timeStamp = std::chrono::steady_clock::now();
+		std::chrono::steady_clock::time_point timeStamp =
+		    std::chrono::steady_clock::now();
 
-		// Check if id exists or if we should create a new node
-		if (std::find(existingStamps.begin(), existingStamps.end(),
-			      id) != existingStamps.end()) {
-			// Update the old node with fresh information
-			graph.get_node(id).update();
-		} else {
-		}
+		graph.stamp_trigger(id, timeStamp);
 
+		exit_time = std::chrono::steady_clock::now();
 		return;
 	}
 

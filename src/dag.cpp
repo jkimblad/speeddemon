@@ -38,6 +38,7 @@ class Dag {
 		lastVisited = get_node(id);
 	}
 
+       private:
 	// Add a new node to the nodes vector and return a pointer to it
 	Node* new_node(const unsigned int id, timestamp timeStamp) {
 		Node* node = new Node(id);

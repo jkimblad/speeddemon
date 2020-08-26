@@ -18,13 +18,13 @@ class Node {
 	std::vector<child> children;
 
 	// Returns a child node given its id
-	Node* get_child_by_id(const unsigned int id) {
+	child* get_child_by_id(const unsigned int id) {
 		// TODO: I dont like using auto
 		auto it = std::find(children.begin(), children.end(), id);
 
 		// Child al
 		if (it != children.end()) {
-			return it->first;
+			return &*it;
 		} else {
 			return nullptr;
 		}

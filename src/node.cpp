@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <chrono>
 #include <ctime>
+#include <functional>
 #include <vector>
 
 namespace speeddemon {
@@ -20,14 +21,16 @@ class Node {
 	// Returns a child node given its id
 	child* get_child_by_id(const unsigned int id) {
 		// TODO: I dont like using auto
-		auto it = std::find(children.begin(), children.end(), id);
+		// TODO: Find uses == to compare type contained in children,
+		// the type however is pair, and not node. Use find_if or
+		// lambda?
 
-		// Child al
-		if (it != children.end()) {
-			return &*it;
-		} else {
-			return nullptr;
+		for (auto it = children.begin(); it != children.end(); it++) {
+			if (it->first->get_id() == id) {
+				return &*it;
+			}
 		}
+		return nullptr;
 	}
 
        public:
@@ -43,13 +46,16 @@ class Node {
 
 	void add_timestamp(timestamp stamp, const unsigned int childId) {
 		child* child_stamp = get_child_by_id(childId);
-		// Check if child has been visited before, else its a new one
+		// Check if child has been visited before, else its a
+		// new one
 		if (child_stamp) {
 			child_stamp->second.push_back(stamp);
 		} else {
 			add_child(new Node(childId), stamp);
 		}
 	}
+
+	const unsigned int get_id() { return id; }
 
 	// Override == operator
 	bool operator==(const Node& other) {

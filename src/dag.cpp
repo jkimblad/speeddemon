@@ -39,20 +39,21 @@ class Dag {
 			// Update the last visited node with fresh information
 			lastVisited->add_timestamp(timeStamp, id);
 		} else {
-			new_node(id, timeStamp);
+			Node* newNode = new_node(id, timeStamp);
 		}
 
 		// Set this visited node to lastVistited for the next function
-		// call
+		// call to object
 		lastVisited = get_node(id);
 	}
 
-	// Add a new node
-	void new_node(const unsigned int id, timestamp timeStamp) {
+	// Add a new node to the nodes vector and return a pointer to it
+	Node* new_node(const unsigned int id, timestamp timeStamp) {
 		Node* node = new Node(id);
 
 		// Add parent nodes
 		lastVisited->add_child(node, timeStamp);
+		return node;
 	}
 
 	// Get an existing node

@@ -11,23 +11,14 @@ namespace dag {
 class Dag {
 	typedef std::chrono::steady_clock::time_point timestamp;
 
-	unsigned int id_counter;
-	Node* lastVisited;
+	Node* lastVisited = nullptr;
 
 	std::vector<Node> nodes;
 
 	Node get_root() { return nodes.front(); };
 
        public:
-	Dag() {
-		// Initialize if_counter if this is the first instance of the
-		// class
-		if (!id_counter) {
-			id_counter = 0;
-		}
-
-		lastVisited = nullptr;
-	}
+	Dag() {}
 
 	// Called when a timestamp is triggered
 	void stamp_trigger(const unsigned int id, timestamp timeStamp) {

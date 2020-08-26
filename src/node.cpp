@@ -32,6 +32,7 @@ class Node {
 
        public:
 	// Constructior
+	// ID is given by the user when creating a new timestamp
 	Node(const unsigned int id) : id(id) {}
 
 	void add_child(Node* child, timestamp timeStamp) {

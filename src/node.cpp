@@ -41,7 +41,15 @@ class Node {
 		    child, std::vector<timestamp>() = {timeStamp}));
 	}
 
-	void add_timestamp(timestamp stamp, const unsigned int child_id) {}
+	void add_timestamp(timestamp stamp, const unsigned int childId) {
+		child* child_stamp = get_child_by_id(childId);
+		// Check if child has been visited before, else its a new one
+		if (child_stamp) {
+			child_stamp->second.push_back(stamp);
+		} else {
+			add_child(new Node(childId), stamp);
+		}
+	}
 
 	// Override == operator
 	bool operator==(const Node& other) {

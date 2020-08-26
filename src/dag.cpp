@@ -62,7 +62,11 @@ class Dag {
 
 		// A match was found
 		if (temp != nodes.end()) {
-			return temp;
+			// TODO temp is an iterator, we want to return a pointer
+			// to the current object its pointing to. We can do this
+			// by dereferencing the iterator (*) and the get a
+			// pointer tot he object via &.
+			return &*temp;
 		} else {
 			// TODO: throw proper error including id
 			throw std::runtime_error(

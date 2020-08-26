@@ -11,8 +11,8 @@ namespace dag {
 class Dag {
 	typedef std::chrono::steady_clock::time_point timestamp;
 
-	static unsigned int id_counter;
-	static Node* lastVisited;
+	unsigned int id_counter;
+	Node* lastVisited;
 
 	std::vector<Node> nodes;
 

@@ -23,10 +23,15 @@ class Dag {
 	// Called when a timestamp is triggered
 	void stamp_trigger(const unsigned int id, timestamp timeStamp) {
 		// Check if id exists or if we should create a new node
-		// TODO: cant compare apples and oranges
-		if (std::find(nodes.begin(), nodes.end(), id) != nodes.end()) {
+		if (std::find_if(nodes.begin(), nodes.end(),
+				 [id](Node* n) -> bool {
+					 return n->get_id() == id;
+				 }) != nodes.end()) {
 			// TODO: Check if node is start node, as no timing
-			// information should be saved
+			// information should be saved. We cant take time from
+			// init() without creating the root node in init(),
+			// since the timing information is kept in the parent
+			// and not in the child.
 			//
 			// Update the last visited node with fresh information
 			lastVisited->add_timestamp(timeStamp, id);
@@ -59,8 +64,9 @@ class Dag {
 
 	// Get an existing node
 	Node* get_node(const unsigned int id) {
-		std::vector<Node*>::iterator temp =
-		    std::find(nodes.begin(), nodes.end(), id);
+		auto&& temp = std::find_if(
+		    nodes.begin(), nodes.end(),
+		    [id](Node* n) -> bool { return n->get_id() == id; });
 
 		// A match was found
 		if (temp != nodes.end()) {

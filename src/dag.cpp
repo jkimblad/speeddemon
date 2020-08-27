@@ -13,9 +13,9 @@ class Dag {
 
 	Node* lastVisited = nullptr;
 
-	std::vector<Node> nodes;
+	std::vector<Node*> nodes;
 
-	Node get_root() { return nodes.front(); };
+	Node* get_root() { return nodes.front(); };
 
        public:
 	Dag() {}
@@ -50,7 +50,7 @@ class Dag {
 
 	// Get an existing node
 	Node* get_node(const unsigned int id) {
-		std::vector<Node>::iterator temp =
+		std::vector<Node*>::iterator temp =
 		    std::find(nodes.begin(), nodes.end(), id);
 
 		// A match was found
@@ -59,7 +59,7 @@ class Dag {
 			// to the current object its pointing to. We can do this
 			// by dereferencing the iterator (*) and the get a
 			// pointer tot he object via &.
-			return &*temp;
+			return *temp;
 		} else {
 			// TODO: throw proper error including id
 			throw std::runtime_error(

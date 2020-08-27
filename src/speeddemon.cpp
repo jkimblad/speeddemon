@@ -32,15 +32,19 @@ class SpeedDemon {
 	SpeedDemon() {}
 
 	void init() {
-		// Perform counter approximations
+		// TODO: Perform counter approximations
 		//	- How long does it take to add a node
 		//	- How long does it take to make a timestamp
 
 		// Make sure that we capture kill signals so we can clean up and
 		// print any results before we exit
+
 		// TODO: This is good for now, but in the future we will
 		// probably want to have continous updates printed out on the
 		// CLI. Maybe using something like "ncurses"?
+		// We will also need to make sure information is printed if we
+		// exit from the program normally, as we cant assume it will
+		// always be interrupted.
 		signal(SIGINT, signal_handler);
 		return;
 
@@ -57,11 +61,22 @@ class SpeedDemon {
 
 		graph.stamp_trigger(id, timeStamp);
 
+		// TODO this is not used right now
 		exit_time = std::chrono::steady_clock::now();
 		return;
 	}
 
-	static void print_dag() { return; }
+	static void print_dag() {
+		// How do we best print the information? PepoThink
+		// Ideas:
+		// 	- Iterate over each individual node. Print its children
+		// and the average duration to get to them.
+		// 	- GUI :DDD
+
+		graph.print();
+
+		return;
+	}
 };
 
 }  // namespace speeddemon

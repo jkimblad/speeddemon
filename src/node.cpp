@@ -2,6 +2,7 @@
 #include <chrono>
 #include <ctime>
 #include <functional>
+#include <iostream>
 #include <vector>
 
 namespace speeddemon {
@@ -52,6 +53,28 @@ class Node {
 			child_stamp->second.push_back(stamp);
 		} else {
 			add_child(new Node(childId), stamp);
+		}
+	}
+
+	void print() {
+		// for (auto it = children.begin(); it != children.end(); it++)
+		// {
+		// for (std::vector<timestamp>::iterator it_time
+		// = it->second.begin();
+		// it_time != it->second.end(); it_time++) {
+		for (const auto& it : children) {
+			std::cout << "ID: " << it.first->get_id() << std::endl;
+			for (const auto& it_time : it.second) {
+				std::cout
+				    << "Node reached at"
+				    // it_time is a time_point and not a
+				    // duration, a duration consists of
+				    // something like time_point - time_point
+				    << std::chrono::duration_cast<
+					   std::chrono::microseconds>(it_time -
+								      it_time)
+					   .count();
+			}
 		}
 	}
 

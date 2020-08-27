@@ -23,6 +23,7 @@ class Dag {
 	// Called when a timestamp is triggered
 	void stamp_trigger(const unsigned int id, timestamp timeStamp) {
 		// Check if id exists or if we should create a new node
+		// TODO: cant compare apples and oranges
 		if (std::find(nodes.begin(), nodes.end(), id) != nodes.end()) {
 			// TODO: Check if node is start node, as no timing
 			// information should be saved
@@ -36,6 +37,14 @@ class Dag {
 		// Set this visited node to lastVistited for the next function
 		// call to object
 		lastVisited = get_node(id);
+	}
+
+	void print() {
+		// Iterate each node one by one
+		for (std::vector<Node*>::iterator it = nodes.begin();
+		     it != nodes.end(); it++) {
+			(*it)->print();
+		}
 	}
 
        private:

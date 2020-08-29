@@ -62,17 +62,15 @@ class Cfg {
 
 		// A match was found
 		if (temp != nodes.end()) {
-			// TODO temp is an iterator, we want to return a pointer
+			// Temp is an iterator, we want to return a pointer
 			// to the current object its pointing to. We can do this
 			// by dereferencing the iterator (*) and the get a
 			// pointer tot he object via &.
 			return *temp;
 		} else {
-			// TODO: throw proper error including id
-			throw std::runtime_error(
-			    "Error! Could not get node by given id!");
+			return nullptr;
 		}
 	}
 };
-}  // namespace dag
+}  // namespace cfg
 }  // namespace speeddemon

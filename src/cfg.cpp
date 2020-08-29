@@ -36,7 +36,8 @@ class Cfg {
 			// Update the last visited node with fresh information
 			lastVisited->add_timestamp(timeStamp, id);
 		} else {
-			Node* newNode = new_node(id, timeStamp);
+			// Add new node to the graph
+			lastVisited->add_child(new Node(id), timeStamp);
 		}
 
 		// Set this visited node to lastVistited for the next function
@@ -53,15 +54,6 @@ class Cfg {
 	}
 
        private:
-	// Add a new node to the nodes vector and return a pointer to it
-	Node* new_node(const unsigned int id, timestamp timeStamp) {
-		Node* node = new Node(id);
-
-		// Add parent nodes
-		lastVisited->add_child(node, timeStamp);
-		return node;
-	}
-
 	// Get an existing node
 	Node* get_node(const unsigned int id) {
 		auto&& temp = std::find_if(

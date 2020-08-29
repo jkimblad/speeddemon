@@ -34,10 +34,16 @@ class Cfg {
 			// and not in the child.
 			//
 			// Update the last visited node with fresh information
-			lastVisited->add_timestamp(timeStamp, id);
+			// We need to also provide a pointer to the node in the
+			// graph with the same id if it exists
+			lastVisited->add_duration(timeStamp, id, get_node(id));
 		} else {
 			// Add new node to the graph
-			lastVisited->add_child(new Node(id), timeStamp);
+			lastVisited->add_child(
+			    new Node(id),
+			    std::chrono::duration_cast<
+				std::chrono::microseconds>(
+				timeStamp - lastVisited->get_latest_stamp()));
 		}
 
 		// Set this visited node to lastVistited for the next function

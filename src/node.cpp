@@ -3,6 +3,7 @@
 #include <ctime>
 #include <functional>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 
 namespace speeddemon {
@@ -10,7 +11,8 @@ namespace cfg {
 
 class Node {
 	typedef std::chrono::steady_clock::time_point timestamp;
-	typedef std::pair<Node*, std::vector<timestamp>> child;
+	typedef std::chrono::microseconds time_microseconds;
+	typedef std::pair<Node*, std::vector<time_microseconds>> child;
 
 	const unsigned int id;
 
@@ -19,47 +21,70 @@ class Node {
 	// 	- Second: std::vector<timestamp>
 	std::vector<child> children;
 
+	timestamp latestStamp;
+
 	// Returns a child node given its id
-	child* get_child_by_id(const unsigned int id) {
+	child get_child_by_id(const unsigned int id) {
 		// TODO: I dont like using auto
+		// 	- I think its fine when using iterators, maybe we want
+		// to always note the type in a comment before?
 		// TODO: Find uses == to compare type contained in children,
 		// the type however is pair, and not node. Use find_if or
 		// lambda?
 
+		// children type: std::vector<child>
 		for (auto it = children.begin(); it != children.end(); it++) {
 			if (it->first->get_id() == id) {
-				return &*it;
+				return *it;
 			}
 		}
-		return nullptr;
+		throw std::invalid_argument(
+		    "get_child_by_id received non-existing id");
 	}
 
        public:
-	// Constructior
+	// Constructor
 	// ID is given by the user when creating a new timestamp
 	Node(const unsigned int id) : id(id) {}
 
-	void add_child(Node* child, timestamp timeStamp) {
-		// Add child node pointer
-		children.push_back(std::pair<Node*, std::vector<timestamp>>(
-		    child, std::vector<timestamp>() = {timeStamp}));
+	child add_child(Node* child_node, time_microseconds dur) {
+		// Calculate duration since last visited Node
+		child temp_child;
+		temp_child.first = child_node;
+		// Add child node
+		children.push_back(std::move(temp_child));
+
+		return children.back();
 	}
 
-	void add_timestamp(timestamp stamp, const unsigned int childId) {
-		child* child_stamp = get_child_by_id(childId);
+	void update_latest_stamp(timestamp stamp) { latestStamp = stamp; }
+
+	void add_duration(timestamp timeStamp, const unsigned int childId,
+			  Node* childNode) {
+		time_microseconds dur =
+		    std::chrono::duration_cast<std::chrono::microseconds>(
+			timeStamp - latestStamp);
 		// Check if child has been visited before, else its a
 		// new one
-		if (child_stamp) {
-			child_stamp->second.push_back(stamp);
-		} else {
-			// Check if child already exist in graph before creating a new one
-			child* child_node = get_child_by_id(childId);
-			if(child_node) {
-				add_child(child_node->first, stamp);
+		try {
+			child stamped_child = get_child_by_id(childId);
+			// Add new duration
+			stamped_child.second.push_back(dur);
+			// Update its latest stamp
+			stamped_child.first->update_latest_stamp(timeStamp);
+		} catch (const std::invalid_argument& ia) {
+			if (childNode) {
+				childNode->add_child(childNode, dur);
 			} else {
-				add_child(new Node(childId), stamp);
+				add_child(new Node(childId), dur);
 			}
 		}
+
+		// Check if child already exist in graph before creating
+		// a new one
+
+		// Update the childs stamp for when it last was visited
+		get_child_by_id(id).first->update_latest_stamp(timeStamp);
 	}
 
 	void print() {
@@ -71,20 +96,22 @@ class Node {
 		for (const auto& it : children) {
 			std::cout << "ID: " << it.first->get_id() << std::endl;
 			for (const auto& it_time : it.second) {
-				std::cout
-				    << "Node reached at"
-				    // it_time is a time_point and not a
-				    // duration, a duration consists of
-				    // something like time_point - time_point
-				    << std::chrono::duration_cast<
-					   std::chrono::microseconds>(it_time -
-								      it_time)
-					   .count();
+				std::cout << "Node reached at"
+					  // it_time is a time_point and not a
+					  // duration, a duration consists of
+					  // something like time_point -
+					  // time_point
+					  << std::chrono::duration_cast<
+						 std::chrono::microseconds>(
+						 it_time - it_time)
+						 .count();
 			}
 		}
 	}
 
 	const unsigned int get_id() { return id; }
+
+	timestamp get_latest_stamp() { return latestStamp; }
 
 	// Override == operator
 	bool operator==(const Node& other) {

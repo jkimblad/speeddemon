@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace speeddemon {
-namespace dag {
+namespace cfg {
 
 class Node {
 	typedef std::chrono::steady_clock::time_point timestamp;
@@ -52,7 +52,13 @@ class Node {
 		if (child_stamp) {
 			child_stamp->second.push_back(stamp);
 		} else {
-			add_child(new Node(childId), stamp);
+			// Check if child already exist in graph before creating a new one
+			child* child_node = get_child_by_id(childId);
+			if(child_node) {
+				add_child(child_node->first, stamp);
+			} else {
+				add_child(new Node(childId), stamp);
+			}
 		}
 	}
 

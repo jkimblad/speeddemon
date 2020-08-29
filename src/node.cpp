@@ -74,7 +74,9 @@ class Node {
 			stamped_child.first->update_latest_stamp(timeStamp);
 		} catch (const std::invalid_argument& ia) {
 			if (childNode) {
-				childNode->add_child(childNode, dur);
+				children.push_back(child(
+				    childNode, std::vector<time_microseconds>(
+						   dur.count())));
 			} else {
 				add_child(new Node(childId), dur);
 			}

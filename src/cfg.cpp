@@ -23,10 +23,7 @@ class Cfg {
 	// Called when a timestamp is triggered
 	void stamp_trigger(const unsigned int id, timestamp timeStamp) {
 		// Check if id exists or if we should create a new node
-		if (std::find_if(nodes.begin(), nodes.end(),
-				 [id](Node* n) -> bool {
-					 return n->get_id() == id;
-				 }) != nodes.end()) {
+		if (get_node(id)) {
 			// TODO: Check if node is start node, as no timing
 			// information should be saved. We cant take time from
 			// init() without creating the root node in init(),
@@ -39,6 +36,8 @@ class Cfg {
 			lastVisited->add_duration(timeStamp, id, get_node(id));
 		} else {
 			// Add new node to the graph
+			// TODO: This call should be changed to an add_duration
+			// call with a newly created node
 			lastVisited->add_child(
 			    new Node(id),
 			    std::chrono::duration_cast<

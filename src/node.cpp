@@ -47,6 +47,12 @@ class Node {
 	// ID is given by the user when creating a new timestamp
 	Node(const unsigned int id) : id(id) {}
 
+	// TODO only add_duration OR add_child should be callable from cfg,
+	// because this is confusing my brain right now. Add duration should
+	// probably be the public interface, and should take an argument which
+	// points to the childnode, which may be empty (non-existing in the
+	// graph up until now) or contain some data. Either which I dont think
+	// matter.
 	child add_child(Node* child_node, time_microseconds dur) {
 		// Calculate duration since last visited Node
 		child temp_child;
@@ -73,11 +79,16 @@ class Node {
 			// Update its latest stamp
 			stamped_child.first->update_latest_stamp(timeStamp);
 		} catch (const std::invalid_argument& ia) {
+			// A node with the same id exists in the graph, but it
+			// is not yet registered as a childnode
 			if (childNode) {
 				children.push_back(child(
 				    childNode, std::vector<time_microseconds>(
 						   dur.count())));
 			} else {
+				// This is the first time we see this node, so
+				// we add it to the graph and as a child
+				// TODO: This node wont end up in cfg.nodes.
 				add_child(new Node(childId), dur);
 			}
 		}

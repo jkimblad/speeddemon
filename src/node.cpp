@@ -80,19 +80,11 @@ class Node {
 			}
 		}
 
-		// Check if child already exist in graph before creating
-		// a new one
-
 		// Update the childs stamp for when it last was visited
 		get_child_by_id(id).first->update_latest_stamp(timeStamp);
 	}
 
 	void print() {
-		// for (auto it = children.begin(); it != children.end(); it++)
-		// {
-		// for (std::vector<timestamp>::iterator it_time
-		// = it->second.begin();
-		// it_time != it->second.end(); it_time++) {
 		for (const auto& it : children) {
 			std::cout << "ID: " << it.first->get_id() << std::endl;
 			for (const auto& it_time : it.second) {
@@ -114,14 +106,14 @@ class Node {
 	timestamp get_latest_stamp() { return latestStamp; }
 
 	// Override == operator
-	bool operator==(const Node& other) {
-		// Compare id's to determine equalness
-		if (id == other.id) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-};
-}  // namespace dag
+	// bool operator==(const Node& other) {
+	//// Compare id's to determine equalness
+	// if (id == other.id) {
+	// return true;
+	//} else {
+	// return false;
+	//}
+	//}
+};  // namespace cfg
+}  // namespace cfg
 }  // namespace speeddemon

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "dag.cpp"
+#include "cfg.cpp"
 
 namespace speeddemon {
 
@@ -15,7 +15,7 @@ namespace speeddemon {
 //
 class SpeedDemon {
 	static std::vector<unsigned int> existingStamps;
-	static dag::Dag graph;
+	static cfg::Cfg graph;
 	static std::chrono::steady_clock::time_point exit_time;
 
 	static void signal_handler(int signum) {

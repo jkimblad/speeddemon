@@ -7,8 +7,8 @@
 #include "node.cpp"
 
 namespace speeddemon {
-namespace dag {
-class Dag {
+namespace cfg {
+class Cfg {
 	typedef std::chrono::steady_clock::time_point timestamp;
 
 	Node* lastVisited = nullptr;
@@ -18,7 +18,7 @@ class Dag {
 	Node* get_root() { return nodes.front(); };
 
        public:
-	Dag() {}
+	Cfg() {}
 
 	// Called when a timestamp is triggered
 	void stamp_trigger(const unsigned int id, timestamp timeStamp) {

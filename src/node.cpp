@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace speeddemon {
-namespace dag {
+namespace cfg {
 
 class Node {
 	typedef std::chrono::steady_clock::time_point timestamp;

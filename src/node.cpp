@@ -25,9 +25,6 @@ class Node {
 
 	// Returns a child node given its id
 	child get_child_by_id(const unsigned int id) {
-		// TODO: I dont like using auto
-		// 	- I think its fine when using iterators, maybe we want
-		// to always note the type in a comment before?
 		// TODO: Find uses == to compare type contained in children,
 		// the type however is pair, and not node. Use find_if or
 		// lambda?
@@ -117,16 +114,6 @@ class Node {
 	const unsigned int get_id() { return id; }
 
 	timestamp get_latest_stamp() { return latestStamp; }
-
-	// Override == operator
-	// bool operator==(const Node& other) {
-	//// Compare id's to determine equalness
-	// if (id == other.id) {
-	// return true;
-	//} else {
-	// return false;
-	//}
-	//}
-};  // namespace cfg
+};
 }  // namespace cfg
 }  // namespace speeddemon

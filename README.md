@@ -19,14 +19,14 @@ Speeddemon s = Speeddemon();
 s.init();
 
 while(true) {
-s.time_stamp();
-// Code block 1
+  s.time_stamp();
+  // Code block 1
 
-s.time_stamp();
-// Code block 2
+  s.time_stamp();
+  // Code block 2
 
-s.time_stamp();
-// Code block 3
+  s.time_stamp();
+  // Code block 3
 }
 ```
 

@@ -27,6 +27,9 @@ while(true) {
 
   s.time_stamp();
   // Code block 3
+  
+  // Final stamp
+  s.time_stamp();
 }
 ```
 

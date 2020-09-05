@@ -14,22 +14,16 @@ namespace speeddemon {
 // results
 //
 class SpeedDemon {
-	static std::vector<unsigned int> existingStamps;
-	static cfg::Cfg graph;
-	static std::chrono::steady_clock::time_point exit_time;
-
-	static void signal_handler(int signum) {
-		// Make sure we print all the results before returning
-		std::cout << "Interrupt signal (" << signum << ") received"
-			  << std::endl;
-
-		print_dag();
-		return;
-	}
+	cfg::Cfg graph;
+	std::chrono::steady_clock::time_point exit_time;
 
        public:
 	// Constructor
 	SpeedDemon() {}
+
+	// TODO: Is init really needed, or can we perform all of the action in
+	// the constructor? If we use several constructors we can use init for
+	// peforming common tasks
 
 	void init() {
 		// TODO: Perform counter approximations
@@ -45,7 +39,6 @@ class SpeedDemon {
 		// We will also need to make sure information is printed if we
 		// exit from the program normally, as we cant assume it will
 		// always be interrupted.
-		signal(SIGINT, signal_handler);
 		return;
 
 		//
@@ -66,7 +59,7 @@ class SpeedDemon {
 		return;
 	}
 
-	static void print_dag() {
+	void print_dag() {
 		// How do we best print the information? PepoThink
 		// Ideas:
 		// 	- Iterate over each individual node. Print its children

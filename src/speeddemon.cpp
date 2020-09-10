@@ -15,11 +15,11 @@ namespace speeddemon {
 //
 class SpeedDemon {
 	cfg::Cfg graph;
-	std::chrono::steady_clock::time_point exit_time;
+	std::chrono::steady_clock::time_point previousExitTime;
 
        public:
 	// Constructor
-	SpeedDemon() {}
+	SpeedDemon() { previousExitTime = std::chrono::steady_clock::now(); }
 
 	// TODO: Is init really needed, or can we perform all of the action in
 	// the constructor? If we use several constructors we can use init for
@@ -49,13 +49,15 @@ class SpeedDemon {
 		// Use steady_clock, as the usage of high_resolution_clock
 		// should be avoided due to inconsistent implementations across
 		// different standard libraries.
-		std::chrono::steady_clock::time_point timeStamp =
+		std::chrono::steady_clock::time_point timeNow =
 		    std::chrono::steady_clock::now();
 
-		graph.stamp_trigger(id, timeStamp);
+		graph.stamp_trigger(
+		    id, std::chrono::duration_cast<std::chrono::microseconds>(
+			    timeNow - previousExitTime));
 
 		// TODO this is not used right now
-		exit_time = std::chrono::steady_clock::now();
+		previousExitTime = std::chrono::steady_clock::now();
 		return;
 	}
 

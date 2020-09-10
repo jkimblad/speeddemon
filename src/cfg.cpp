@@ -9,7 +9,7 @@
 namespace speeddemon {
 namespace cfg {
 class Cfg {
-	typedef std::chrono::steady_clock::time_point timestamp;
+	typedef std::chrono::microseconds duration;
 
 	Node* lastVisited = nullptr;
 
@@ -21,7 +21,7 @@ class Cfg {
 	Cfg() {}
 
 	// Called when a timestamp is triggered
-	void stamp_trigger(const unsigned int id, timestamp timeStamp) {
+	void stamp_trigger(const unsigned int id, duration timeDuration) {
 		// Check if id exists or if we should create a new node
 		if (get_node(id)) {
 			// TODO: Check if node is start node, as no timing
@@ -33,16 +33,13 @@ class Cfg {
 			// Update the last visited node with fresh information
 			// We need to also provide a pointer to the node in the
 			// graph with the same id if it exists
-			lastVisited->add_duration(timeStamp, id, get_node(id));
+			lastVisited->add_duration(timeDuration, id,
+						  get_node(id));
 		} else {
 			// Add new node to the graph
 			// TODO: This call should be changed to an add_duration
 			// call with a newly created node
-			lastVisited->add_child(
-			    new Node(id),
-			    std::chrono::duration_cast<
-				std::chrono::microseconds>(
-				timeStamp - lastVisited->get_latest_stamp()));
+			lastVisited->add_child(new Node(id), timeDuration);
 		}
 
 		// Set this visited node to lastVistited for the next function

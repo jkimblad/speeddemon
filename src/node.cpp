@@ -10,7 +10,7 @@ namespace speeddemon {
 namespace cfg {
 
 class Node {
-	typedef std::chrono::steady_clock::time_point timestamp;
+	typedef std::chrono::microseconds duration;
 	typedef std::chrono::microseconds time_microseconds;
 	typedef std::pair<Node*, std::vector<time_microseconds>> child;
 
@@ -18,12 +18,12 @@ class Node {
 
 	// Vector of pairs consitsing of:
 	// 	- First: Node* child
-	// 	- Second: std::vector<timestamp>
+	// 	- Second: std::vector<duration>
 	std::vector<child> children;
 
-	timestamp latestStamp;
-
 	// Returns a child node given its id
+	// TODO: This should return a pointer, as we might want to mess with the
+	// child that is returned
 	child get_child_by_id(const unsigned int id) {
 		// TODO: Find uses == to compare type contained in children,
 		// the type however is pair, and not node. Use find_if or
@@ -50,7 +50,7 @@ class Node {
 	// points to the childnode, which may be empty (non-existing in the
 	// graph up until now) or contain some data. Either which I dont think
 	// matter.
-	child add_child(Node* child_node, time_microseconds dur) {
+	child add_child(Node* child_node, duration dur) {
 		// Calculate duration since last visited Node
 		child temp_child;
 		temp_child.first = child_node;
@@ -60,38 +60,28 @@ class Node {
 		return children.back();
 	}
 
-	void update_latest_stamp(timestamp stamp) { latestStamp = stamp; }
-
-	void add_duration(timestamp timeStamp, const unsigned int childId,
+	void add_duration(duration timeDuration, const unsigned int childId,
 			  Node* childNode) {
-		time_microseconds dur =
-		    std::chrono::duration_cast<std::chrono::microseconds>(
-			timeStamp - latestStamp);
 		// Check if child has been visited before, else its a
 		// new one
 		try {
 			child stamped_child = get_child_by_id(childId);
 			// Add new duration
-			stamped_child.second.push_back(dur);
-			// Update its latest stamp
-			stamped_child.first->update_latest_stamp(timeStamp);
+			stamped_child.second.push_back(timeDuration);
 		} catch (const std::invalid_argument& ia) {
 			// A node with the same id exists in the graph, but it
 			// is not yet registered as a childnode
 			if (childNode) {
 				children.push_back(child(
-				    childNode, std::vector<time_microseconds>(
-						   dur.count())));
+				    childNode, std::vector<duration>(
+						   timeDuration.count())));
 			} else {
 				// This is the first time we see this node, so
 				// we add it to the graph and as a child
 				// TODO: This node wont end up in cfg.nodes.
-				add_child(new Node(childId), dur);
+				add_child(new Node(childId), timeDuration);
 			}
 		}
-
-		// Update the childs stamp for when it last was visited
-		get_child_by_id(id).first->update_latest_stamp(timeStamp);
 	}
 
 	void print() {
@@ -112,8 +102,6 @@ class Node {
 	}
 
 	const unsigned int get_id() { return id; }
-
-	timestamp get_latest_stamp() { return latestStamp; }
 };
 }  // namespace cfg
 }  // namespace speeddemon

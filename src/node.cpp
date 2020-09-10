@@ -50,36 +50,23 @@ class Node {
 	// points to the childnode, which may be empty (non-existing in the
 	// graph up until now) or contain some data. Either which I dont think
 	// matter.
-	child add_child(Node* child_node, duration dur) {
-		// Calculate duration since last visited Node
-		child temp_child;
-		temp_child.first = child_node;
-		// Add child node
-		children.push_back(std::move(temp_child));
+	void add_duration(duration timeDuration, Node* childNode) {
+		// Check if child has been visited before from this node, else
+		// we are given a pointer to a newly created node or a node
+		// that exists somewhere else in the graph
 
-		return children.back();
-	}
-
-	void add_duration(duration timeDuration, const unsigned int childId,
-			  Node* childNode) {
-		// Check if child has been visited before, else its a
-		// new one
 		try {
-			child stamped_child = get_child_by_id(childId);
+			child stamped_child =
+			    get_child_by_id(childNode->get_id());
 			// Add new duration
 			stamped_child.second.push_back(timeDuration);
 		} catch (const std::invalid_argument& ia) {
-			// A node with the same id exists in the graph, but it
-			// is not yet registered as a childnode
+			// The node is not yet registered as a child node to
+			// the current node
 			if (childNode) {
 				children.push_back(child(
 				    childNode, std::vector<duration>(
 						   timeDuration.count())));
-			} else {
-				// This is the first time we see this node, so
-				// we add it to the graph and as a child
-				// TODO: This node wont end up in cfg.nodes.
-				add_child(new Node(childId), timeDuration);
 			}
 		}
 	}
@@ -102,6 +89,6 @@ class Node {
 	}
 
 	const unsigned int get_id() { return id; }
-};
+};  // namespace cfg
 }  // namespace cfg
 }  // namespace speeddemon

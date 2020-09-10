@@ -12,8 +12,8 @@ class Cfg {
 	typedef std::chrono::microseconds duration;
 
 	Node* lastVisited = nullptr;
-
 	std::vector<Node*> nodes;
+	unsigned int idCount = 0;
 
 	Node* get_root() { return nodes.front(); };
 
@@ -33,13 +33,11 @@ class Cfg {
 			// Update the last visited node with fresh information
 			// We need to also provide a pointer to the node in the
 			// graph with the same id if it exists
-			lastVisited->add_duration(timeDuration, id,
-						  get_node(id));
+			lastVisited->add_duration(timeDuration, get_node(id));
 		} else {
-			// Add new node to the graph
-			// TODO: This call should be changed to an add_duration
-			// call with a newly created node
-			lastVisited->add_child(new Node(id), timeDuration);
+			// Create a new node and add it to the graph
+			lastVisited->add_duration(timeDuration,
+						  new Node(++idCount));
 		}
 
 		// Set this visited node to lastVistited for the next function

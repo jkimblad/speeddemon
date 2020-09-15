@@ -23,12 +23,12 @@ class Node {
 
 	// Returns a child node given its id
 	// TODO: This should return a pointer, as we might want to mess with the
-	// child that is returned
+	// child that is returned.
+	// 	- Actually I dont think so, since the child contains a pointer
+	// 	to the node which we are interested in. The only thing is if we
+	// 	use this function to add values to its vector of time
+	// 	durations, as we want to manipulate the original vector then
 	child get_child_by_id(const unsigned int id) {
-		// TODO: Find uses == to compare type contained in children,
-		// the type however is pair, and not node. Use find_if or
-		// lambda?
-
 		// children type: std::vector<child>
 		for (auto it = children.begin(); it != children.end(); it++) {
 			if (it->first->get_id() == id) {
@@ -44,12 +44,6 @@ class Node {
 	// ID is given by the user when creating a new timestamp
 	Node(const unsigned int id) : id(id) {}
 
-	// TODO only add_duration OR add_child should be callable from cfg,
-	// because this is confusing my brain right now. Add duration should
-	// probably be the public interface, and should take an argument which
-	// points to the childnode, which may be empty (non-existing in the
-	// graph up until now) or contain some data. Either which I dont think
-	// matter.
 	void add_duration(duration timeDuration, Node* childNode) {
 		// Check if child has been visited before from this node, else
 		// we are given a pointer to a newly created node or a node
@@ -75,15 +69,8 @@ class Node {
 		for (const auto& it : children) {
 			std::cout << "ID: " << it.first->get_id() << std::endl;
 			for (const auto& it_time : it.second) {
-				std::cout << "Node reached at"
-					  // it_time is a time_point and not a
-					  // duration, a duration consists of
-					  // something like time_point -
-					  // time_point
-					  << std::chrono::duration_cast<
-						 std::chrono::microseconds>(
-						 it_time - it_time)
-						 .count();
+				std::cout << "Duration " << it_time.count()
+					  << std::endl;
 			}
 		}
 	}

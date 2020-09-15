@@ -22,13 +22,7 @@ class Node {
 	std::vector<child> children;
 
 	// Returns a child node given its id
-	// TODO: This should return a pointer, as we might want to mess with the
-	// child that is returned.
-	// 	- Actually I dont think so, since the child contains a pointer
-	// 	to the node which we are interested in. The only thing is if we
-	// 	use this function to add values to its vector of time
-	// 	durations, as we want to manipulate the original vector then
-	child get_child_by_id(const unsigned int id) {
+	child& get_child_by_id(const unsigned int id) {
 		// children type: std::vector<child>
 		for (auto it = children.begin(); it != children.end(); it++) {
 			if (it->first->get_id() == id) {
@@ -48,7 +42,6 @@ class Node {
 		// Check if child has been visited before from this node, else
 		// we are given a pointer to a newly created node or a node
 		// that exists somewhere else in the graph
-
 		try {
 			child stamped_child =
 			    get_child_by_id(childNode->get_id());

@@ -33,7 +33,10 @@ class Cfg {
 			// Update the last visited node with fresh information
 			// We need to also provide a pointer to the node in the
 			// graph with the same id if it exists
-			lastVisited->add_duration(timeDuration, get_node(id));
+			if (lastVisited) {
+				lastVisited->add_duration(timeDuration,
+							  get_node(id));
+			}
 		} else {
 			// Create a new node and add it to the graph
 			lastVisited->add_duration(timeDuration,

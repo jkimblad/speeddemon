@@ -35,3 +35,5 @@ while(true) {
 
 The speedemon object traps any kill signals sent to the program and prints the results before exiting when a SIGINT is sent (ctrl+c).
 
+A good idea when using speeddemon in a loop that wont terminate is to trap any kill signals sent to the program and print the results before exiting when a SIGINT (ctrl + c) is sent. This can be done through:
+FIXME: Add example code

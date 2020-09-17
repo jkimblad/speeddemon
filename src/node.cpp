@@ -14,7 +14,7 @@ class Node {
 	typedef std::chrono::microseconds time_microseconds;
 	typedef std::pair<Node*, std::vector<time_microseconds>> child;
 
-	const unsigned int id;
+	const int id;
 
 	// Vector of pairs consitsing of:
 	// 	- First: Node* child
@@ -22,7 +22,7 @@ class Node {
 	std::vector<child> children;
 
 	// Returns a child node given its id
-	child& get_child_by_id(const unsigned int id) {
+	child& get_child_by_id(const int id) {
 		// children type: std::vector<child>
 		for (auto it = children.begin(); it != children.end(); it++) {
 			if (it->first->get_id() == id) {
@@ -36,7 +36,7 @@ class Node {
        public:
 	// Constructor
 	// ID is given by the user when creating a new timestamp
-	Node(const unsigned int id) : id(id) {}
+	Node(const int id) : id(id) {}
 
 	void add_duration(duration timeDuration, Node* childNode) {
 		// Check if child has been visited before from this node, else
@@ -68,7 +68,7 @@ class Node {
 		}
 	}
 
-	const unsigned int get_id() { return id; }
+	const int get_id() { return id; }
 };  // namespace cfg
 }  // namespace cfg
 }  // namespace speeddemon

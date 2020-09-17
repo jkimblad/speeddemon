@@ -44,7 +44,7 @@ class SpeedDemon {
 	}
 
 	// perform a new timestamp somewhere in the code
-	void time_stamp(unsigned int id) {
+	void time_stamp(int id) {
 		// Use steady_clock, as the usage of high_resolution_clock
 		// should be avoided due to inconsistent implementations across
 		// different standard libraries.

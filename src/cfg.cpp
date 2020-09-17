@@ -13,7 +13,7 @@ class Cfg {
 
 	Node* lastVisited = nullptr;
 	std::vector<Node*> nodes;
-	unsigned int idCount = 0;
+	int idCount = 0;
 
 	Node* get_root() { return nodes.front(); };
 
@@ -21,7 +21,7 @@ class Cfg {
 	Cfg() {}
 
 	// Called when a timestamp is triggered
-	void stamp_trigger(const unsigned int id, duration timeDuration) {
+	void stamp_trigger(const int id, duration timeDuration) {
 		// Check if id exists or if we should create a new node
 		if (get_node(id)) {
 			// TODO: Check if node is start node, as no timing
@@ -58,7 +58,7 @@ class Cfg {
 
        private:
 	// Get an existing node
-	Node* get_node(const unsigned int id) {
+	Node* get_node(const int id) {
 		auto&& temp = std::find_if(
 		    nodes.begin(), nodes.end(),
 		    [id](Node* n) -> bool { return n->get_id() == id; });

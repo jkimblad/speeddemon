@@ -24,7 +24,6 @@ class SpeedDemon {
 	// TODO: Is init really needed, or can we perform all of the action in
 	// the constructor? If we use several constructors we can use init for
 	// peforming common tasks
-
 	void init() {
 		// TODO: Perform counter approximations
 		//	- How long does it take to add a node
@@ -56,7 +55,6 @@ class SpeedDemon {
 		    id, std::chrono::duration_cast<std::chrono::microseconds>(
 			    timeNow - previousExitTime));
 
-		// TODO this is not used right now
 		previousExitTime = std::chrono::steady_clock::now();
 		return;
 	}

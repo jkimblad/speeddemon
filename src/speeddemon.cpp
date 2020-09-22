@@ -59,4 +59,4 @@ void SpeedDemon::print_dag() {
 	return;
 }
 
-};  // namespace speeddemon
+}  // namespace speeddemon

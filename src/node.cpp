@@ -68,7 +68,7 @@ class Node {
 		}
 	}
 
-	const int get_id() { return id; }
-};  // namespace cfg
+	int get_id() { return id; }
+};
 }  // namespace cfg
 }  // namespace speeddemon

@@ -14,6 +14,7 @@ class Cfg {
 	Node* lastVisited = nullptr;
 	std::vector<Node*> nodes;
 	int idCount = 0;
+	int rootId = 0;
 
 	Node* get_root() { return nodes.front(); };
 
@@ -24,12 +25,6 @@ class Cfg {
 	void stamp_trigger(const int id, duration timeDuration) {
 		// Check if id exists or if we should create a new node
 		if (get_node(id)) {
-			// TODO: Check if node is start node, as no timing
-			// information should be saved. We cant take time from
-			// init() without creating the root node in init(),
-			// since the timing information is kept in the parent
-			// and not in the child.
-			//
 			// Update the last visited node with fresh information
 			// We need to also provide a pointer to the node in the
 			// graph with the same id if it exists
@@ -37,6 +32,11 @@ class Cfg {
 				lastVisited->add_duration(timeDuration,
 							  get_node(id));
 			}
+		} else if (!lastVisited) {
+			// First node we visit, no timing information will be
+			// saved
+			rootId = id;
+
 		} else {
 			// Create a new node and add it to the graph
 			lastVisited->add_duration(timeDuration,

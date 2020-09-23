@@ -31,6 +31,12 @@ namespace speeddemon {
 ////
 //}
 
+// Constructor
+SpeedDemon::SpeedDemon() {
+	// This value wont be used, but variable needs to be initialized
+	previousExitTime = std::chrono::steady_clock::now();
+}
+
 // perform a new timestamp somewhere in the code
 void SpeedDemon::time_stamp(int id) {
 	// Use steady_clock, as the usage of high_resolution_clock

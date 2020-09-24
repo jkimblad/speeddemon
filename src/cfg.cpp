@@ -14,8 +14,6 @@ class Cfg {
 	Node* lastVisited = nullptr;
 	Node* rootNode = nullptr;
 	std::vector<Node*> nodes;
-	int idCount = 0;
-	int rootId = 0;
 
 	Node* get_root() { return nodes.front(); };
 
@@ -40,8 +38,7 @@ class Cfg {
 
 		} else {
 			// Create a new node and add it to the graph
-			lastVisited->add_duration(timeDuration,
-						  new Node(++idCount));
+			lastVisited->add_duration(timeDuration, new Node(id));
 		}
 
 		// Set this visited node to lastVistited for the next function

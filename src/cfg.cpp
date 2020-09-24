@@ -25,8 +25,6 @@ class Cfg {
 		// Check if id exists or if we should create a new node
 		if (get_node(id)) {
 			// Update the last visited node with fresh information
-			// We need to also provide a pointer to the node in the
-			// graph with the same id if it exists
 			if (lastVisited) {
 				lastVisited->add_duration(timeDuration,
 							  get_node(id));
@@ -41,13 +39,10 @@ class Cfg {
 			lastVisited->add_duration(timeDuration, new Node(id));
 		}
 
-		// Set this visited node to lastVistited for the next function
-		// call to object
 		lastVisited = get_node(id);
 	}
 
 	void print() {
-		// Iterate each node one by one
 		for (std::vector<Node*>::iterator it = nodes.begin();
 		     it != nodes.end(); it++) {
 			(*it)->print();
@@ -63,10 +58,6 @@ class Cfg {
 
 		// A match was found
 		if (temp != nodes.end()) {
-			// Temp is an iterator, we want to return a pointer
-			// to the current object its pointing to. We can do this
-			// by dereferencing the iterator (*) and the get a
-			// pointer tot he object via &.
 			return *temp;
 		} else {
 			return nullptr;

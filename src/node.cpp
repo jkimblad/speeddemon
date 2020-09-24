@@ -21,9 +21,7 @@ class Node {
 	// 	- Second: std::vector<duration>
 	std::vector<child> children;
 
-	// Returns a child node given its id
 	child& get_child_by_id(const int id) {
-		// children type: std::vector<child>
 		for (auto it = children.begin(); it != children.end(); it++) {
 			if (it->first->get_id() == id) {
 				return *it;
@@ -35,7 +33,6 @@ class Node {
 
        public:
 	// Constructor
-	// ID is given by the user when creating a new timestamp
 	Node(const int id) : id(id) {}
 
 	void add_duration(duration timeDuration, Node* childNode) {
@@ -45,7 +42,6 @@ class Node {
 		try {
 			child stamped_child =
 			    get_child_by_id(childNode->get_id());
-			// Add new duration
 			stamped_child.second.push_back(timeDuration);
 		} catch (const std::invalid_argument& ia) {
 			// The node is not yet registered as a child node to
